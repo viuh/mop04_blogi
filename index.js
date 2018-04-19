@@ -4,7 +4,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const Blog = require('./models/blog')
+//const Blog = require('./models/blog')
 
 
 var morgan = require('morgan')
@@ -34,25 +34,22 @@ console.log('Dbname:',dbname)
 
 const mongoUrl = 'mongodb://'+process.env.DBUSER+':'+process.env.DBPASS+dbname
 
-mongoose.connect(mongoUrl)
+//mongoose.connect(mongoUrl)
 
-app.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-})
+mongoose
+  .connect(mongoUrl)
+  .then( () => {
+    console.log('connected to database', dbname)
+  })
+  .catch( err => {
+    console.log(err)
+  })
 
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
 
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-})
+// -----------------------------
+const blogsRouter = require('./controllers/blogs')
+app.use('/api/blogs', blogsRouter)
+
 
 const PORT = 3001
 app.listen(PORT, () => {

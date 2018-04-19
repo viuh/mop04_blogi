@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 content-type: application/json
 
 {
-  "title": "blogi3",
-  "author": "Cecilia Kivi",
-  "url" : "urli3",
-  "likes": 3
+  "title": "blogi4",
+  "author": "Dingo Pebble",
+  "url" : "urli4",
+  "likes": 4
 }
