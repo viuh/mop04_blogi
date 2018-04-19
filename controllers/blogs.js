@@ -40,7 +40,7 @@ blogsRouter.get('/:id', (request, response) => {
 })
 
 blogsRouter.delete('/:id', (request, response) => {
-  const id = request.param.id
+  const id = request.params.id
 
   Blog
     .findByIdAndRemove(request.params.id)
@@ -66,21 +66,47 @@ blogsRouter.post('/', (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes === undefined ? 0 : body.likes
-    //id: blog._id
-    //content: body.content,
-    //important: body.important === undefined ? false : body.important,
-    //date: new Date()
   })
+
 
   blog
     .save()
-    .then(note => {
-      return formatBlog(note)
+    .then(blogi => {
+      return formatBlog(blogi)
     })
     .then(formattedNote => {
       response.json(formattedNote)
     })
 
+})
+
+
+blogsRouter.put('/:id', (request, response) => {
+  const body = request.body
+  const id = request.params.id
+
+  console.log('Putti:', id, '- paivitetaan mm.', body.title)
+
+  if (id === undefined) {
+    return response.status(400).json({ error: 'id missing: '+id })
+  }
+
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes === undefined ? 0 : body.likes,
+  }
+
+  Blog
+    .findByIdAndUpdate(id, blog, { new:true })
+    .then(updatedBlog => {
+      response.json(formatBlog(updatedBlog))
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(400).send({ error: 'malformatted id: '+id })
+    })
 })
 
 
