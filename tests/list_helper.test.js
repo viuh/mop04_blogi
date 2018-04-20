@@ -106,7 +106,7 @@ describe('Most liked blog (of many blogs)', () => {
 
   test('Most liked blog ', () => {
     const result = listHelper.favoriteBlog(lotsblogs)
-    console.log('Tul',result)
+    //console.log('Tul',result)
     expect(result).toEqual(mosty)
   })
 })
@@ -116,8 +116,8 @@ describe('Most liked blog (of many blogs)', () => {
 describe('Most active author (of many blogs)', () => {
 
   test('Most active author ', () => {
-    const result = listHelper.favAuthor(lotsblogs)
-    console.log('Tul',result)
+    const result = listHelper.mostBlogs(lotsblogs)
+    //console.log('Tul',result)
     expect(result).toEqual(authorwithmost)
   })
 })

@@ -43,7 +43,7 @@ const favoriteBlog = (blogs) => {
 
 }
 
-const favAuthor = (blogs) => {
+const mostBlogs = (blogs) => {
 
   let tally = {}
   blogs.forEach (
@@ -76,5 +76,5 @@ module.exports = {
   dummy ,
   totalLikes ,
   favoriteBlog ,
-  favAuthor
+  mostBlogs
 }
