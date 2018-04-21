@@ -148,7 +148,7 @@ describe.skip('list helpers', () => {
 
   describe('total likes', () => {
     test('of empty list is 0', () => {
-      const result = listHelper.totalLikes(emptyList)
+      const result = listHelper.totalLikes({emptyList})
       expect(result).toBe(0)
     })
   })

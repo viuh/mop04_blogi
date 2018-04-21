@@ -14,12 +14,14 @@ const formatBlog = (blog) => {
 }
 
 
-blogsRouter.get('/', (request, response) => {
-  Blog
+blogsRouter.get('/', async (request, response) => {
+  /*Blog
     .find({})
     .then(blogs => {
       response.json(blogs.map(formatBlog))
-    })
+    })*/
+  const blogs = await Blog.find({})
+  response.json(blogs.map(formatBlog))
 })
 
 
