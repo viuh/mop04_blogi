@@ -60,7 +60,7 @@ const mostBlogs = (blogs) => {
   authors.forEach (
     item => {
       if (tally[item]> maxval) {
-        myMax = { "author": item, "blogs": tally[item] }
+        myMax = { 'author': item, 'blogs': tally[item] }
         maxval = tally[item]
       }
     }
@@ -89,7 +89,7 @@ const mostLikes = (blogs) => {
     item => {
       //console.log('ttt', item, ';',tally[item])
       if (tally[item]>= maxval) {
-        myMax = { "author": item, "likes": tally[item] }
+        myMax = { 'author': item, 'likes': tally[item] }
         maxval = tally[item]
       }
     }
@@ -105,6 +105,6 @@ module.exports = {
   dummy ,
   totalLikes ,
   favoriteBlog ,
-  mostBlogs , 
+  mostBlogs ,
   mostLikes
 }

@@ -88,7 +88,7 @@ const mosty = {
 }
 
 const authorwithmost = {
-  author: "Robert C. Martin",
+  author: 'Robert C. Martin',
   blogs: 3
 }
 
