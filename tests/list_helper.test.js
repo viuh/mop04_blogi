@@ -92,6 +92,12 @@ const authorwithmost = {
   blogs: 3
 }
 
+const mostlikedauthor = {
+  author: 'Edsger W. Dijkstra',
+  likes: 17
+}
+
+
 
 describe('total likes (of many blogs)', () => {
 
@@ -119,6 +125,15 @@ describe('Most active author (of many blogs)', () => {
     const result = listHelper.mostBlogs(lotsblogs)
     //console.log('Tul',result)
     expect(result).toEqual(authorwithmost)
+  })
+})
+
+describe('Most likes for author (of many blogs)', () => {
+
+  test('Most likes for author ', () => {
+    const result = listHelper.mostLikes(lotsblogs)
+    //console.log('Tul',result)
+    expect(result).toEqual(mostlikedauthor)
   })
 })
 

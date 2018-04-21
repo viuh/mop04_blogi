@@ -66,7 +66,36 @@ const mostBlogs = (blogs) => {
     }
   )
 
-  //console.log('countti', myMax)
+  console.log('mblogs', myMax)
+  return myMax
+}
+
+
+const mostLikes = (blogs) => {
+
+  let tally = {}  //this time auth:likes
+  blogs.forEach (
+    blog => {
+      tally[blog.author] = (tally[blog.author] || 0 ) + blog.likes
+      //console.log('tally:', tally[blog.author])
+    }
+  )
+
+  let authors = Object.keys(tally)
+  let myMax = {}
+  let maxval =0
+
+  authors.forEach (
+    item => {
+      //console.log('ttt', item, ';',tally[item])
+      if (tally[item]>= maxval) {
+        myMax = { "author": item, "likes": tally[item] }
+        maxval = tally[item]
+      }
+    }
+  )
+
+  console.log('mliked', myMax)
   return myMax
 }
 
@@ -76,5 +105,6 @@ module.exports = {
   dummy ,
   totalLikes ,
   favoriteBlog ,
-  mostBlogs
+  mostBlogs , 
+  mostLikes
 }
