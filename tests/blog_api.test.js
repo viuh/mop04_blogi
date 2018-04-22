@@ -64,7 +64,7 @@ describe('Blog api - GET tests', () => {
   test('GET should fail with fake id', async () => {
 
     const response = await api
-      .get('/api/blogs/sofakeid')
+      .get('/api/blogs/sofakeidAAA')
       .expect(400)
 
   })
@@ -193,28 +193,81 @@ describe('Blog api - DELETE tests', () => {
     expect(blogsAfter.length).toBe(blogsBefore.length - 1)
   })
 
+  test('DELETE of notexistant id fails ', async () => {
+    const blogsBefore = await blogsInDb()
+
+    await api
+      .delete('/api/blogs/sofakeid')
+      .expect(400)
+
+    const blogsAfter = await blogsInDb()
+
+    expect(blogsAfter.length).toBe(blogsBefore.length)
+  })
+
+
   afterAll(() => {
     server.close()
   })
 
 })
 
-//describe('/api/blogs GET tests', () => {
 
-/*test('GET, json, 200, some content', () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-    .expect(response.body.length).toBe(3)
+describe('Blog api - PUT tests', () => {
+
+  let fixedBlog
+
+  /*beforeAll (async () => {
+    fixedBlog = new Blog ({
+      _id: '5a422ba71b54a676234d17fb',
+      title: 'TDD harms architecture',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+      likes: 0,
+      __v: 0
+    })
+    await fixedBlog.save()
   })*/
-//})
+
+/*  test('PUT /api/blogs/:id succeeds ', async () => {
+    const blogsBefore = await blogsInDb()
+
+    const fixedBlog = new Blog ({
+      _id: '5a422ba71b54a676234d17fb',
+      title: 'TDD harms architecture',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+      likes: 0,
+      __v: 0
+    })
+
+    const fixUpper = new Blog ({
+      likes: 9
+    })
+
+    const response = await api
+      .put(`/api/blogs/${fixedBlog._id}`)
+      .send(fixUpper)
+      .expect(204)
+
+    console.log('PUt?', fixUpper)
+    const blogsAfter = await blogsInDb()
+
+    const contents = blogsAfter.map(r => r.url)
+
+    expect(contents).toContain(fixedBlog.url)
+    expect(blogsAfter.length).toBe(blogsBefore.length)
+
+  })
+*/
+
+})
+
+
 
 afterAll (() => {
   server.close()
 })
-
-
 
 
 
