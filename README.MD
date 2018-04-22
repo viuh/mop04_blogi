@@ -12,3 +12,7 @@ npm run watch
 
 npm test
 
+# todo
+
+npx jest -t "PUT /api/blogs/:id succeeds "
+

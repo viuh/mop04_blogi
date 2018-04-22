@@ -212,57 +212,53 @@ describe('Blog api - DELETE tests', () => {
 
 })
 
-
-describe('Blog api - PUT tests', () => {
+/*
+describe.skip('Blog api - PUT tests', () => {
 
   let fixedBlog
+  let addedone 
+  beforeAll (async () => {
 
-  /*beforeAll (async () => {
+    //_id: '5a422bc61b54a676234d17AA',
+
     fixedBlog = new Blog ({
-      _id: '5a422ba71b54a676234d17fb',
-      title: 'TDD harms architecture',
-      author: 'Robert C. Martin',
-      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-      likes: 0,
+      title: 'To bug or not',
+      author: 'Grace Hopper',
+      url: 'http://google.com',
+      likes: 18,
       __v: 0
     })
-    await fixedBlog.save()
-  })*/
+    addedone = await fixedBlog.save()
+    console.log('LIsatty 1 paivitysta varten')
+  })
 
-/*  test('PUT /api/blogs/:id succeeds ', async () => {
+  test('PUT /api/blogs/:id succeeds', async () => {
+
     const blogsBefore = await blogsInDb()
 
-    const fixedBlog = new Blog ({
-      _id: '5a422ba71b54a676234d17fb',
-      title: 'TDD harms architecture',
-      author: 'Robert C. Martin',
-      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-      likes: 0,
-      __v: 0
-    })
+    console.log('Lisatty::: XXX', addedone._id)
 
-    const fixUpper = new Blog ({
-      likes: 9
-    })
+    const fixUpper = {
+      likes: 19
+    }
 
-    const response = await api
-      .put(`/api/blogs/${fixedBlog._id}`)
+    const response = await api.put(`/api/blogs/${addedone._id}`)
       .send(fixUpper)
-      .expect(204)
+      .expect(200)
 
     console.log('PUt?', fixUpper)
     const blogsAfter = await blogsInDb()
 
-    const contents = blogsAfter.map(r => r.url)
+    //const contents = blogsAfter.map(r => r.url)
 
-    expect(contents).toContain(fixedBlog.url)
-    expect(blogsAfter.length).toBe(blogsBefore.length)
+    expect(response.body.likes.toBe(fixUpper.likes))
+    //expect(blogsAfter.length).toBe(blogsBefore.length)
 
   })
-*/
+
 
 })
-
+*/
 
 
 afterAll (() => {
@@ -330,6 +326,16 @@ const manyblogs = [
     likes: 8,
     __v: 0
   },
+  {
+    _id: '5a422bc61b54a676234d17AA',
+    title: 'To bug or not',
+    author: 'Grace Hopper',
+    url: 'http://google.com',
+    likes: 18,
+    __v: 0
+  },
+
+
 ]
 
 

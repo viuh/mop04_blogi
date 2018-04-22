@@ -1,9 +1,7 @@
-PUT http://localhost:3001/api/blogs/5ad8dc2672a683b9e8748a6f
+PUT http://localhost:3001/api/blogs/5a422ba71b54a676234d17fb
 content-type: application/json
 
 {
-  "title": "blogi4b",
-  "author": "Dingo Pebble-Rock",
   "url" : "urli4",
-  "likes": 5
+  "likes": 16
 }

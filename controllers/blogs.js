@@ -83,25 +83,27 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 
-blogsRouter.put(':id' , async (request, response) => {
+blogsRouter.put('/:id' , async (request, response) => {
 
+  console.log('Putti for ', request.params.id)
   try {
 
     const body = request.body
 
     const blog = {
-      url: body.url,
       likes: body.likes === undefined ? 0 : body.likes
     }
     console.log('NEwer?', blog)
+    let id = request.params.id
 
-    const savedOne = await Blog.findByIdAndUpdate(request.params.id, blog, { new:true })
-    //const savedOne = await blog.save()
-    console.log('tall PUT:', savedOne)
-    response.json(formatBlog(savedOne))
+    const updatedOne = await Blog.findByIdAndUpdate( id
+      , blog , { new: true }
+    )
+    updatedOne.save()
+    response.json(updatedOne)
   } catch (exception) {
     console.log(exception)
-    response.status(400).json({ error: 'something went wrong...' + savedOne })
+    response.status(400).json({ error: 'something went wrong...' + request.params.id })
   }
 
 })
