@@ -3,27 +3,10 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const { format, initialBlogs, blogsInDb } = require('./test_helper')
 
 // --------------------------------------
 
-const initialBlogs = [
-  {
-    _id: '5a422a851b54a676234d17f7',
-    title: 'React patterns',
-    author: 'Michael Chan',
-    url: 'https://reactpatterns.com/',
-    likes: 7,
-    __v: 0
-  },
-  {
-    _id: '5a422aa71b54a676234d17f8',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0
-  }
-]
 
 
 beforeAll(async () => {
@@ -102,9 +85,82 @@ describe('Blog api - GET tests', () => {
 
 describe('Blog api - POST tests', () => {
 
+  test('POST valid blog can be added', async () => {
+
+    const newBlog =  {
+      _id: '5a422bc61b54a676234d17s2',
+      title: 'Readability or brevity',
+      author: 'Ada Lovelace',
+      url: 'http://google.com',
+      likes: 8,
+      __v: 0
+    }
+
+    const blogsBefore =  await blogsInDb()
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type',/application\/json/)
+
+    const blogsAfter = await blogsInDb()
+
+    expect(blogsAfter.length).toBe(blogsBefore.length+1)
+
+    const contents = blogsAfter.map(r => r.title)
+    expect(contents).toContain('Readability or brevity')
+  })
+
+  test('POST empty blog CANNOT be added', async () => {
+
+    const newBlog2 =  {
+      author: 'Nick None'
+    }
+
+    const blogsBefore =  await blogsInDb()
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog2)
+      .expect(400)
+
+    const blogsAfter = await blogsInDb()
+    const contents = blogsAfter.map(r=>r.title)
+
+    expect(blogsAfter.length).toBe(blogsBefore.length)
+    //expect(contents).notContain('Readability or brevity')
+
+  })
+
+  test('POST without likes is initialized to zero', async () => {
+
+    const newBlog =  {
+      _id: '5a422bc61b54a676234d17s2',
+      title: 'Readability or brevity',
+      author: 'Ada Lovelace',
+      url: 'http://google.com',
+      __v: 0
+    }
+
+    const blogsBefore =  await blogsInDb()
+
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type',/application\/json/)
+
+    const blogsAfter = await blogsInDb()
+
+    expect(blogsAfter.length).toBe(blogsBefore.length+1)
+    //console.log('RP', response.body)
+    expect(response.body.likes).toBe(0)
+  })
+
+
+
 })
-
-
 //describe('/api/blogs GET tests', () => {
 
 /*test('GET, json, 200, some content', () => {

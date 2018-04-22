@@ -41,37 +41,7 @@ blogsRouter.get('/:id', async (request, response) => {
     response.status(400).json({ error: 'something went weird at get id' })
   }
 
-
-
-  /*  .then(blog => {
-      if (blog) {
-        response.json(formatBlog(blog))
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => {
-      response.status(400).send({ error: 'malformatted id' })
-    })*/
 })
-
-
-
-
-/*blogsRouter.get('/:id', (request, response) => {
-  Blog
-    .findById(request.params.id)
-    .then(blog => {
-      if (blog) {
-        response.json(formatBlog(blog))
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => {
-      response.status(400).send({ error: 'malformatted id' })
-    })
-})*/
 
 blogsRouter.delete('/:id', (request, response) => {
   const id = request.params.id
@@ -87,32 +57,33 @@ blogsRouter.delete('/:id', (request, response) => {
     })
 })
 
-blogsRouter.post('/', (request, response) => {
-  const body = request.body
-  console.log('Postaus:',body)
-  if (body.title === undefined) {
-    response.status(400).json({ error: 'title missing' })
+blogsRouter.post('/', async (request, response) => {
+
+  try {
+    const body = request.body
+    console.log('Postaus:',body)
+
+    if (body === undefined || (body.title === undefined && body.url === undefined )) {
+      response.status(400).json({ error: 'title and url missing' })
+    } else {
+
+      const blog = new Blog({
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: body.likes === undefined ? 0 : body.likes
+      })
+
+      const savedOne = await blog.save()
+      response.json(formatBlog(blog))
+    }
+  } catch (exception) {
+    console.log(exception)
+    response.status(400).json({ error: 'something went wrong...' })
   }
 
-
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes === undefined ? 0 : body.likes
-  })
-
-
-  blog
-    .save()
-    .then(blogi => {
-      return formatBlog(blogi)
-    })
-    .then(formattedNote => {
-      response.json(formattedNote)
-    })
-
 })
+
 
 
 blogsRouter.put('/:id', (request, response) => {
@@ -148,22 +119,3 @@ blogsRouter.put('/:id', (request, response) => {
 module.exports = blogsRouter
 
 
-//5ad8dbe91bf337ba88054770
-// -------------------------------------
-/*blogsRouter.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
-
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-})*/
-
-/*blogsRouter.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-})*/

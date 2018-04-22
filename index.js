@@ -35,15 +35,16 @@ if ( process.env.NODE_ENV !== 'production' ) {
 //const mongoUrl = 'mongodb://'+process.env.DBUSER+':'+process.env.DBPASS+dbname
 //mongoose.connect(mongoUrl)
 
-mongoose
-  .connect(config.mongoUrl)
-  .then( () => {
+mongoose.connect(config.mongoUrl)
+mongoose.Promise = global.Promise
+
+/*  .then( () => {
     console.log('connected to database', config.mongoUrl)
   })
   .catch( err => {
-    console.log(err)
+    console.log('Stuff', err)
   })
-
+*/
 
 // -----------------------------
 const blogsRouter = require('./controllers/blogs')
