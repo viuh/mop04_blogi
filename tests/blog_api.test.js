@@ -126,7 +126,7 @@ describe('Blog api - POST tests', () => {
       .expect(400)
 
     const blogsAfter = await blogsInDb()
-    const contents = blogsAfter.map(r=>r.title)
+    const contents = blogsAfter.map(r => r.title)
 
     expect(blogsAfter.length).toBe(blogsBefore.length)
     //expect(contents).notContain('Readability or brevity')
@@ -161,6 +161,44 @@ describe('Blog api - POST tests', () => {
 
 
 })
+
+describe('Blog api - DELETE tests', () => {
+
+  let addedBlog
+
+  beforeAll (async () => {
+    addedBlog = new Blog ({
+      _id: '5a422ba71b54a676234d17fb',
+      title: 'TDD harms architecture',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+      likes: 0,
+      __v: 0
+    })
+    await addedBlog.save()
+  })
+
+  test('DELETE /api/blogs/:id succeeds ', async () => {
+    const blogsBefore = await blogsInDb()
+
+    await api
+      .delete(`/api/blogs/${addedBlog._id}`)
+      .expect(204)
+
+    const blogsAfter = await blogsInDb()
+
+    const contents = blogsAfter.map(r => r.title)
+
+    expect(contents).not.toContain(addedBlog.content)
+    expect(blogsAfter.length).toBe(blogsBefore.length - 1)
+  })
+
+  afterAll(() => {
+    server.close()
+  })
+
+})
+
 //describe('/api/blogs GET tests', () => {
 
 /*test('GET, json, 200, some content', () => {
