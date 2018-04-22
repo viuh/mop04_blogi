@@ -23,5 +23,8 @@
     "morgan": "^1.9.0",
     "nodemon": "^1.17.3",
     "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "bcrypt": "^2.0.1"
   }
 }

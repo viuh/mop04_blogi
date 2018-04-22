@@ -5,6 +5,9 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const middleware = require('./utils/middleware')
+const usersRouter = require('./controllers/users')
+
+app.use('/api/users', usersRouter)
 
 //const Blog = require('./models/blog')
 const config = require('./utils/config')
