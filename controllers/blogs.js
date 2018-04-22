@@ -25,8 +25,40 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 
+blogsRouter.get('/:id', async (request, response) => {
 
-blogsRouter.get('/:id', (request, response) => {
+  try {
+    const blog = await Blog.findById(request.params.id)
+
+
+    if (blog) {
+      response.json(formatBlog(blog))
+    } else {
+      response.status(404).end()
+    }
+  } catch (exception) {
+    //console.log(exception)
+    response.status(400).json({ error: 'something went weird at get id' })
+  }
+
+
+
+  /*  .then(blog => {
+      if (blog) {
+        response.json(formatBlog(blog))
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => {
+      response.status(400).send({ error: 'malformatted id' })
+    })*/
+})
+
+
+
+
+/*blogsRouter.get('/:id', (request, response) => {
   Blog
     .findById(request.params.id)
     .then(blog => {
@@ -39,7 +71,7 @@ blogsRouter.get('/:id', (request, response) => {
     .catch(error => {
       response.status(400).send({ error: 'malformatted id' })
     })
-})
+})*/
 
 blogsRouter.delete('/:id', (request, response) => {
   const id = request.params.id

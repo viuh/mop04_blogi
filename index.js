@@ -9,7 +9,7 @@ const middleware = require('./utils/middleware')
 //const Blog = require('./models/blog')
 const config = require('./utils/config')
 app.use(express.static('build'))
-app.use(middleware.logger)
+//app.use(middleware.logger)
 
 var morgan = require('morgan')
 
@@ -50,7 +50,7 @@ const blogsRouter = require('./controllers/blogs')
 app.use('/api/blogs', blogsRouter)
 
 
-app.use(middleware.error)
+//app.use(middleware.error)
 
 const server = http.createServer(app)
 

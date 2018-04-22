@@ -37,30 +37,72 @@ beforeAll(async () => {
 })
 
 
-test('notes are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+describe('Blog api - GET tests', () => {
+
+
+  test('GET notes are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('GET all notes are returned', async () => {
+    const response = await api
+      .get('/api/blogs')
+
+    expect(response.body.length).toBe(initialBlogs.length)
+  })
+
+
+  test('GET a specific blog is within the returned blogs', async () => {
+    const response = await api
+      .get('/api/blogs')
+
+    const contents = response.body.map(r => r.title)
+    //console.log('XXX contents',contents)
+    expect(contents).toContain('React patterns')
+  })
+
+  test('GET a blog by id', async () => {
+
+    const first = initialBlogs[0]
+
+    const response = await api
+      .get(`/api/blogs/${first._id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    //console.log('ZZZ title:' , first.title, 'a:', response.body.title)
+
+    expect(response.body.title).toBe(first.title)
+  })
+
+  test('GET should fail with fake id', async () => {
+
+    const response = await api
+      .get('/api/blogs/sofakeid')
+      .expect(400)
+
+  })
+
+  //
+  test('GET valid, but not existing ', async () => {
+
+    const response = await api
+      .get('/api/blogs/5a422b3a1b54a676234d17f9')
+      .expect(404)
+
+  })
+
+
 })
 
-test('all notes are returned', async () => {
-  const response = await api
-    .get('/api/blogs')
 
-  expect(response.body.length).toBe(initialBlogs.length)
+
+describe('Blog api - POST tests', () => {
+
 })
-
-
-test('a specific blog is within the returned blogs', async () => {
-  const response = await api
-    .get('/api/blogs')
-
-  const contents = response.body.map(r => r.title)
-  console.log('XXX contents',contents)
-  expect(contents).toContain('React patterns')
-})
-
 
 
 //describe('/api/blogs GET tests', () => {
