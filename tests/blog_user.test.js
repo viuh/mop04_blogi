@@ -5,7 +5,7 @@ const { format, initialBlogs, blogsInDb, usersInDb } = require('./test_helper')
 const api = supertest(app)
 
 
-describe.skip('when there is initially one user at db', async () => {
+describe('when there is initially one user at db', async () => {
 
   beforeAll(async () => {
     await User.remove({})
