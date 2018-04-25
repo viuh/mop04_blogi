@@ -14,10 +14,32 @@ const formatBlog = (blog) => {
   }
 }
 
+const getTokenFrom = (request) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+
+    console.log('TOKEN GOT', authorization.substring(7))
+    return authorization.substring(7)
+  }
+  return null
+}
+
+const getOneTokenUser = (str) => {
+
+  // tokeni
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1YWRlMzNjMDU0ZWFmYzk1NDhlNzZhMzQiLCJpYXQiOjE1MjQ1MTM0ODl9.FDcCNgHJbHMuEGgUE2-KS7w6Uw2kEx09AdDSuyI4nm4
+
+  return '5ade33c054eafc9548e76a34'
+
+
+}
+
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog
+    .find({})
     .populate('user', { username:1, name:1 })
+
   response.json(blogs.map(Blog.format))
 })
 
@@ -52,25 +74,6 @@ blogsRouter.delete('/:id', async (request, response) => {
   }
 })
 
-const getTokenFrom = (request) => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-
-    console.log('TOKEN GOT', authorization.substring(7))
-    return authorization.substring(7)
-  }
-  return null
-}
-
-const getOneTokenUser = (str) => {
-
-  // tokeni
-  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1YWRlMzNjMDU0ZWFmYzk1NDhlNzZhMzQiLCJpYXQiOjE1MjQ1MTM0ODl9.FDcCNgHJbHMuEGgUE2-KS7w6Uw2kEx09AdDSuyI4nm4
-
-  return '5ade33c054eafc9548e76a34'
-
-
-}
 
 
 blogsRouter.post('/', async (request, response) => {
@@ -78,16 +81,15 @@ blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
   try {
-    let token = getTokenFrom(request)
+    const token = getTokenFrom(request)
 
-    if (token === undefined && body.token!== undefined) {
-      token = body.token
+    if (body.title === undefined) {
+      return response.status(400).json({ error: 'Blog title missing' })
+    }
 
-      console.log('body token', body.token)
-    }  //???
 
-    console.log('Tokeni?', token)
     const decodedToken = jwt.verify(token, process.env.SECRET)
+
 
     if (!token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
@@ -97,20 +99,23 @@ blogsRouter.post('/', async (request, response) => {
       response.status(400).json({ error: 'title and url missing' })
     } else {
 
-      console.log('Decodd user', decodedToken.id , '???')
+      //console.log('Decodd user', decodedToken.id , '???')
 
       let user = await User.findById(decodedToken.id)
-      //let user = userx
-      //const user = await User.findById(body.userId)
-      console.log('UUUU: ', user)
 
+      if (user === undefined || user===null) {
+        //console.log('Last chance user PATH ')
+        user = await User.findOne({})  // fixupper  TODO
+      }
+
+      //console.log('UUUU: ', user)
 
       const blog = new Blog({
         title: body.title,
         author: body.author,
         url: body.url,
         likes: body.likes === undefined ? 0 : body.likes,
-        user: decodedToken.id // 4.19
+        user: user._id // 4.19
       })
 
       const savedOne = await blog.save()
@@ -123,9 +128,10 @@ blogsRouter.post('/', async (request, response) => {
     }
   } catch (exception) {
     if (exception.name === 'JsonWebTokenError' ) {
+      console.log('JSon token error!!!!!')
       response.status(401).json({ error: exception.message })
     } else {
-      console.log(exception)
+      console.log('Blog post EXCP', exception)
       response.status(500).json({ error: 'something went wrong...' })
     }
   }
@@ -152,7 +158,7 @@ blogsRouter.put('/:id' , async (request, response) => {
     updatedOne.save()
     response.json(updatedOne)
   } catch (exception) {
-    console.log(exception)
+    //console.log(exception)
     response.status(400).json({ error: 'something went wrong...' + request.params.id })
   }
 
@@ -160,35 +166,6 @@ blogsRouter.put('/:id' , async (request, response) => {
 
 
 
-/*blogsRouter.put('/:id',  (request, response) => {
-  const body = request.body
-  const id = request.params.id
-
-  console.log('Putti:', id, '- paivitetaan mm.', body.title)
-
-  if (id === undefined) {
-    return response.status(400).json({ error: 'id missing: '+id })
-  }
-
-  const blog = {
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes === undefined ? 0 : body.likes,
-  }
-
-  Blog
-    .findByIdAndUpdate(id, blog, { new:true })
-    .then(updatedBlog => {
-      response.json(formatBlog(updatedBlog))
-    })
-    .catch(error => {
-      console.log(error)
-      response.status(400).send({ error: 'malformatted id: '+id })
-    })
-})
-
-*/
 
 module.exports = blogsRouter
 

@@ -9,16 +9,17 @@ usersRouter.post('/', async (request, response) => {
   const body = request.body  //request ei tuo==
 
   try {
-    console.log('tyyppis:',body.username)
+    //console.log('tyyppis:',body.username, ' salis: ', body.password)
+
+    if (body.password.length < 3) {
+      return response.status(400).json({ error: 'Password is too short , should be >3' })
+    }
 
     const existingUser = await User.find({ username: body.username })
     if (existingUser.length>0) {
       return response.status(400).json({ error: 'username must be unique' })
     }
 
-    if (body.password < 3) {
-      return response.status(400).json({ error: 'Password is too short , should be >3' })
-    }
 
     const saltRounds = 10
     var salt = bcrypt.genSaltSync(saltRounds)
@@ -31,7 +32,11 @@ usersRouter.post('/', async (request, response) => {
       passwordHash
     })
 
+    //console.log('USeri controlleris:', user)
+
     const savedUser = await user.save()
+
+    //console.log('USeri controlleris:222', savedUser)
 
     response.json(User.format(savedUser))
   } catch (exception) {

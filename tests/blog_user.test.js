@@ -8,7 +8,7 @@ const api = supertest(app)
 
 
 
-describe('******** /api/users test cases *******', async () => {
+describe('** /api/users test cases **', async () => {
 
   beforeAll(async () => {
     await User.remove({})
@@ -19,11 +19,14 @@ describe('******** /api/users test cases *******', async () => {
   test('POST /api/users succeeds with a fresh username', async () => {
     const usersBeforeOperation = await usersInDb()
 
+    //console.log('Ennen lista: ', usersBeforeOperation)
+
     const newUser = {
       username: 'mluukkai',
       name: 'Matti Luukkainen',
       password: 'salainen'
     }
+
 
     await api
       .post('/api/users')
@@ -32,6 +35,9 @@ describe('******** /api/users test cases *******', async () => {
       .expect('Content-Type', /application\/json/)
 
     const usersAfterOperation = await usersInDb()
+
+    //console.log('Afteri: ', usersAfterOperation)
+
     expect(usersAfterOperation.length).toBe(usersBeforeOperation.length+1)
     const usernames = usersAfterOperation.map(u => u.username)
     expect(usernames).toContain(newUser.username)
@@ -41,10 +47,10 @@ describe('******** /api/users test cases *******', async () => {
     const usersBeforeOperation = await usersInDb()
 
     const newUser = {
-      username: 'moot',
+      username: 'root',
       name: 'Superuser',
-      password: 'salainen',
-      adult: true    
+      password: 'mahoton',
+      adult: true
     }
 
     const result = await api
@@ -52,6 +58,7 @@ describe('******** /api/users test cases *******', async () => {
       .send(newUser)
       .expect(400)
       .expect('Content-Type', /application\/json/)
+
 
     expect(result.body).toEqual({ error: 'username must be unique' })
 
@@ -97,13 +104,15 @@ describe('******** /api/users test cases *******', async () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    expect(result.adult).toEqual(true)
+    expect(result.body.adult).toEqual(true)
 
     const usersAfterOperation = await usersInDb()
     expect(usersAfterOperation.length).toBe(usersBeforeOperation.length+1)
   })
 
-
+  afterAll (() => {
+    server.close()
+  })
 
 })
 

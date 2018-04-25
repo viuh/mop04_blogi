@@ -65,9 +65,13 @@ app.use('/api/login', loginRouter)
 
 const server = http.createServer(app)
 
-server.listen(config.port, () => {
-  console.log(`Server running on port ${config.port}`)
-})
+try {
+  server.listen(config.port, () => {
+    console.log(`Server running on port ${config.port}`)
+  })
+} catch (exception) {
+  console.log('hmmm'+exception)
+}
 
 server.on('close', () => {
   mongoose.connection.close()

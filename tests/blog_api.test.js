@@ -20,7 +20,7 @@ beforeAll(async () => {
 })
 
 
-describe('Blog api - GET tests', () => {
+describe('+++ Blog api - GET tests', () => {
 
 
   test('GET notes are returned as json', async () => {
@@ -118,22 +118,20 @@ describe('Blog api - POST tests', () => {
 
     const newBlog2 =  {
       author: 'Nick None',
-      token: aToken
+      title: 'Nobody No'
     }
 
     const blogsBefore =  await blogsInDb()
 
     await api
       .post('/api/blogs')
-      .set('authorization','bearer '+aToken)
       .send(newBlog2)
       .expect(401)
 
     const blogsAfter = await blogsInDb()
-    const contents = blogsAfter.map(r => r.title)
+    // const contents = blogsAfter.map(r => r.title)
 
     expect(blogsAfter.length).toBe(blogsBefore.length)
-    //expect(contents).notContain('Readability or brevity')
 
   })
 
@@ -216,6 +214,12 @@ describe('Blog api - DELETE tests', () => {
   })
 
 })
+
+
+afterAll (() => {
+  server.close()
+})
+
 
 /*
 describe.skip('Blog api - PUT tests', () => {
