@@ -1,16 +1,6 @@
-const bcryptjs = require('bcryptjs')
+const bcrypt = require('bcryptjs')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
-
-/*const formatUser = (user) => {
-  return {
-    id: user.id,
-    username: user.username,
-    name: user.name,
-    blogs: user.blogs,
-    adult: user.adult
-  }
-}*/
 
 
 
@@ -26,13 +16,18 @@ usersRouter.post('/', async (request, response) => {
       return response.status(400).json({ error: 'username must be unique' })
     }
 
+    if (body.password < 3) {
+      return response.status(400).json({ error: 'Password is too short , should be >3' })
+    }
+
     const saltRounds = 10
-    const passwordHash = await bcryptjs.hashSync(body.password, saltRounds)
+    var salt = bcrypt.genSaltSync(saltRounds)
+    const passwordHash = await bcrypt.hashSync(body.password, salt)
 
     const user = new User({
       username: body.username,
       name: body.name,
-      adult: body.adult,
+      adult: body.adult === undefined ? true : body.adult,
       passwordHash
     })
 

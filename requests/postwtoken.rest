@@ -1,12 +1,11 @@
 
 POST http://localhost:3001/api/blogs
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1YWRkMDU5OTQ3OGI0ZjFiNDVlNTVkYzYiLCJpYXQiOjE1MjQ1MDcwNjB9.BSEc319c-5VnbOuwonC5BZuf4fg5lNW39WNdx-USTGg
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5uaWNrMyIsImlkIjoiNWFkZjg2ZWZmZDU0YTBkZmIxNTY1MjVmIiwiaWF0IjoxNTI0NTk4NjQyfQ.hys3Ttd1q82DMfp3KjfrG7Y7Ir9GtmANnlaGh0L6QCc
 
 {
 	"title": "A Midsummer Night's Dream",
 	"author": "Shakespeare",
 	"url" : "http://altavista.com221",
-	"likes": 15,
-	"userId" : "5add0599478b4f1b45e55dc6"
+	"likes": 15
 }

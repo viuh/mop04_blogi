@@ -3,6 +3,11 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 
+const aToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5uaWNrMyIsImlkIjoiNWFkZjg2ZWZmZDU0YTBkZmIxNTY1MjVmIiwiaWF0IjoxNTI0NTk4NTQxfQ.zzdoh7B7wMYoExd1JnTqGPrIMGB0pIEhf4GJGeCKqFo' 
+//'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5uaWNrIiwiaWQiOiI1YWRmODE2N2U3Y2VhZTU1MzRhYTNmOGYiLCJpYXQiOjE1MjQ1OTcxNDV9.t9C_Xm2prK2Rm5AyENK5hc-iydexMptdRySn7OeTAys' 
+//'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1YWRkMDU5OTQ3OGI0ZjFiNDVlNTVkYzYiLCJpYXQiOjE1MjQ1MDcwNjB9.BSEc319c-5VnbOuwonC5BZuf4fg5lNW39WNdx-USTGg'
+
+
 const initialBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -50,7 +55,7 @@ const usersInDb = async () => {
 
 
 module.exports = {
-  initialBlogs, format, blogsInDb, usersInDb
+  initialBlogs, format, blogsInDb, usersInDb, aToken
 }
 
 

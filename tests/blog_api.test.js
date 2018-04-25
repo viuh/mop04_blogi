@@ -3,7 +3,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { format, initialBlogs, blogsInDb } = require('./test_helper')
+const { format, initialBlogs, blogsInDb, aToken } = require('./test_helper')
 
 // --------------------------------------
 
@@ -85,7 +85,7 @@ describe('Blog api - GET tests', () => {
 
 describe('Blog api - POST tests', () => {
 
-  test('POST valid blog can be added', async () => {
+  test('POST valid blog can be added'+aToken, async () => {
 
     const newBlog =  {
       _id: '5a422bc61b54a676234d17s2',
@@ -100,6 +100,7 @@ describe('Blog api - POST tests', () => {
 
     await api
       .post('/api/blogs')
+      .set('authorization','bearer '+aToken)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type',/application\/json/)
@@ -110,20 +111,23 @@ describe('Blog api - POST tests', () => {
 
     const contents = blogsAfter.map(r => r.title)
     expect(contents).toContain('Readability or brevity')
+
   })
 
-  test('POST empty blog CANNOT be added', async () => {
+  test('POST empty blog CANNOT be added (no token)', async () => {
 
     const newBlog2 =  {
-      author: 'Nick None'
+      author: 'Nick None',
+      token: aToken
     }
 
     const blogsBefore =  await blogsInDb()
 
     await api
       .post('/api/blogs')
+      .set('authorization','bearer '+aToken)
       .send(newBlog2)
-      .expect(400)
+      .expect(401)
 
     const blogsAfter = await blogsInDb()
     const contents = blogsAfter.map(r => r.title)
@@ -147,6 +151,7 @@ describe('Blog api - POST tests', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set('authorization','bearer '+aToken)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type',/application\/json/)
@@ -216,7 +221,7 @@ describe('Blog api - DELETE tests', () => {
 describe.skip('Blog api - PUT tests', () => {
 
   let fixedBlog
-  let addedone 
+  let addedone
   beforeAll (async () => {
 
     //_id: '5a422bc61b54a676234d17AA',

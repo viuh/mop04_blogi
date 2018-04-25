@@ -1,11 +1,14 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const User = require('../models/user')
-const { format, initialBlogs, blogsInDb, usersInDb } = require('./test_helper')
+const { format, initialBlogs, blogsInDb, usersInDb, aToken } = require('./test_helper')
 const api = supertest(app)
 
 
-describe('when there is initially one user at db', async () => {
+
+
+
+describe('******** /api/users test cases *******', async () => {
 
   beforeAll(async () => {
     await User.remove({})
@@ -55,6 +58,51 @@ describe('when there is initially one user at db', async () => {
     const usersAfterOperation = await usersInDb()
     expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
   })
+
+  test('POST /api/users fails with proper statuscode if pwd too short', async () => {
+    const usersBeforeOperation = await usersInDb()
+
+    const newUser = {
+      username: 'groot',
+      name: 'sogroot',
+      password: 'so'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    console.log('result: XXXX', result.body)
+
+    expect(result.body).toEqual({ error: 'Password is too short , should be >3' })
+
+    const usersAfterOperation = await usersInDb()
+    expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
+  })
+
+  test('POST /api/users valid without adultness', async () => {
+    const usersBeforeOperation = await usersInDb()
+
+    const newUser = {
+      username: 'strange',
+      name: 'Dr. Strange',
+      password: 'sostrange123'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.adult).toEqual(true)
+
+    const usersAfterOperation = await usersInDb()
+    expect(usersAfterOperation.length).toBe(usersBeforeOperation.length+1)
+  })
+
 
 
 })
