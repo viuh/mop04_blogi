@@ -14,7 +14,7 @@ const formatBlog = (blog) => {
   }
 }
 
-const getTokenFrom = (request) => {
+/*const getTokenFrom = (request) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
 
@@ -22,7 +22,7 @@ const getTokenFrom = (request) => {
     return authorization.substring(7)
   }
   return null
-}
+}*/
 
 const getOneTokenUser = (str) => {
 
@@ -81,7 +81,9 @@ blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
   try {
-    const token = getTokenFrom(request)
+    const token = request.token
+    console.log('XXXX token?', token)
+    //getTokenFrom(request)
 
     if (body.title === undefined) {
       return response.status(400).json({ error: 'Blog title missing' })

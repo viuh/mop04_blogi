@@ -6,6 +6,8 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const middleware = require('./utils/middleware')
 
+app.use(middleware.tokenExtractor)
+
 
 
 //const Blog = require('./models/blog')
