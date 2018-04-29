@@ -87,7 +87,7 @@ blogsRouter.post('/', async (request, response) => {
     //console.log('XXXX token?', token)
     //getTokenFrom(request)
 
-    if (body.title === undefined) {
+    if (body.title === undefined || body.title === null || body.title === '') {
       return response.status(400).json({ error: 'Blog title missing' })
     }
 

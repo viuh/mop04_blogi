@@ -23,7 +23,7 @@ loginRouter.post('/', async (request, response) => {
     }
 
     const token = jwt.sign(userForToken, process.env.SECRET)
-    console.log('Usename:'+user.username, '- token:',token)
+    console.log('Username:'+user.username, '- token:',token)
     response.status(200).send({ token, username: user.username, name: user.name })
   } catch (exception) {
     console.log(exception)
