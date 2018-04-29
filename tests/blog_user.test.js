@@ -3,17 +3,18 @@ const { app, server } = require('../index')
 const User = require('../models/user')
 const { format, initialBlogs, blogsInDb, usersInDb, aToken } = require('./test_helper')
 const api = supertest(app)
-
-
-
+//const Blog = require('../models/blog')
 
 
 describe('** /api/users test cases **', async () => {
 
-  beforeAll(async () => {
+  beforeAll (async () => {
+
     await User.remove({})
     const user = new User({ username: 'root', password: 'sekret' })
+    //user.blogs.concat(blogObject)
     await user.save()
+
   })
 
   test('POST /api/users succeeds with a fresh username', async () => {

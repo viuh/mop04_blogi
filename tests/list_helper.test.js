@@ -7,7 +7,7 @@ test('dummy is called', () => {
   expect(result).toBe(1)
 })
 
-describe('total likes', () => {
+describe.skip('total likes', () => {
   const listWithOneBlog = [
     {
       _id: '5a422aa71b54a676234d17f8',

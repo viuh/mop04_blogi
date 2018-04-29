@@ -14,26 +14,6 @@ const formatBlog = (blog) => {
   }
 }
 
-/*const getTokenFrom = (request) => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-
-    console.log('TOKEN GOT', authorization.substring(7))
-    return authorization.substring(7)
-  }
-  return null
-}*/
-
-const getOneTokenUser = (str) => {
-
-  // tokeni
-  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1YWRlMzNjMDU0ZWFmYzk1NDhlNzZhMzQiLCJpYXQiOjE1MjQ1MTM0ODl9.FDcCNgHJbHMuEGgUE2-KS7w6Uw2kEx09AdDSuyI4nm4
-
-  return '5ade33c054eafc9548e76a34'
-
-
-}
-
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -66,8 +46,30 @@ blogsRouter.delete('/:id', async (request, response) => {
 
   try {
     const id = request.params.id
-    await Blog.findByIdAndRemove(id)
-    response.status(204).end()
+
+    const token = request.token
+
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    //user should contain info of his|her blogs.
+    let theblog = await Blog.findById(id)
+
+    //console.log('Owner of blog: '+ theblog.user.toString() )
+    //console.log('Request made by:'+ decodedToken.id )
+
+    if ( theblog.user.toString() === decodedToken.id.toString() ) {
+      console.log('Blog user == token user, can delete')
+      await Blog.findByIdAndRemove(id)
+      console.log('removal done for blog id: '+id)
+      return response.status(204).end()
+    } else {
+      return response.status(403).json({ error: 'can only delete own blogs' })
+    }
+
   } catch(exception) {
     //console.log(exception)
     response.status(400).send({ error: 'malformatted id:'+request.params.id })
@@ -82,7 +84,7 @@ blogsRouter.post('/', async (request, response) => {
 
   try {
     const token = request.token
-    console.log('XXXX token?', token)
+    //console.log('XXXX token?', token)
     //getTokenFrom(request)
 
     if (body.title === undefined) {
@@ -100,8 +102,6 @@ blogsRouter.post('/', async (request, response) => {
     if (body === undefined || (body.title === undefined && body.url === undefined )) {
       response.status(400).json({ error: 'title and url missing' })
     } else {
-
-      //console.log('Decodd user', decodedToken.id , '???')
 
       let user = await User.findById(decodedToken.id)
 
@@ -130,10 +130,10 @@ blogsRouter.post('/', async (request, response) => {
     }
   } catch (exception) {
     if (exception.name === 'JsonWebTokenError' ) {
-      console.log('JSon token error!!!!!')
+      //console.log('JSon token error!!!!!')
       response.status(401).json({ error: exception.message })
     } else {
-      console.log('Blog post EXCP', exception)
+      //console.log('Blog post EXCP', exception)
       response.status(500).json({ error: 'something went wrong...' })
     }
   }
@@ -143,7 +143,7 @@ blogsRouter.post('/', async (request, response) => {
 
 blogsRouter.put('/:id' , async (request, response) => {
 
-  console.log('Putti for ', request.params.id)
+  //console.log('Putti for ', request.params.id)
   try {
 
     const body = request.body
@@ -151,7 +151,7 @@ blogsRouter.put('/:id' , async (request, response) => {
     const blog = {
       likes: body.likes === undefined ? 0 : body.likes
     }
-    console.log('NEwer?', blog)
+    //console.log('NEwer?', blog)
     let id = request.params.id
 
     const updatedOne = await Blog.findByIdAndUpdate( id

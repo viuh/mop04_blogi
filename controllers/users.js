@@ -1,6 +1,7 @@
-const bcrypt = require('bcryptjs')
+const bcryptjs = require('bcryptjs')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 
 
@@ -22,8 +23,8 @@ usersRouter.post('/', async (request, response) => {
 
 
     const saltRounds = 10
-    var salt = bcrypt.genSaltSync(saltRounds)
-    const passwordHash = await bcrypt.hashSync(body.password, salt)
+    var salt = bcryptjs.genSaltSync(saltRounds)
+    const passwordHash = await bcryptjs.hashSync(body.password, salt)
 
     const user = new User({
       username: body.username,
@@ -35,6 +36,15 @@ usersRouter.post('/', async (request, response) => {
     //console.log('USeri controlleris:', user)
 
     const savedUser = await user.save()
+
+    //TTT
+    const userForToken = {
+      username: savedUser.username,
+      id: savedUser._id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+    console.log('Usename:'+user.username,' id: ',savedUser._id,  '- token:',token)
 
     //console.log('USeri controlleris:222', savedUser)
 

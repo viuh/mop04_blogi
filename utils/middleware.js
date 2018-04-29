@@ -16,15 +16,13 @@ const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
 
-    console.log('TOKEN GOT', authorization.substring(7))
+    //console.log('TOKEN GOT', authorization.substring(7))
     request.token =  authorization.substring(7)
   } else {
   //return null
     request.token = null
   }
-  console.log('token final:',request.token)
-  //return request
-  //res.end()
+
   next()
 }
 

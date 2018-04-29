@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs
 content-type: application/json
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1YWRmOGE2N2JjNmU3YjZiNTk1NjFkODEiLCJpYXQiOjE1MjQ2Nzk2MzR9.ZE8lPEp5PhXFAWybmo29aqeQ_a-0a44huEBPDIni0Yc
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1YWU1OWY0YTBlZDQ3MjM4ZGQ2OWIxMDEiLCJpYXQiOjE1MjQ5OTg1MTB9.2RAdKOFXV4itTKN9l_Rp0I_a8Dy0cTuSrr9YHY0XZhE
 
 {
-  "title": "blogi4",
-  "author": "Dingo Pebble",
-  "url" : "urli4",
-  "likes": 4
+  "title": "blogi 5",
+  "author": "Foodie food 5",
+  "url" : "urli5",
+  "likes": 5
 }
