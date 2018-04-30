@@ -10,7 +10,8 @@ const formatBlog = (blog) => {
     author: blog.author,
     url: blog.url,
     likes: blog.likes,
-    id: blog._id
+    id: blog._id,
+    user: blog.user
   }
 }
 
@@ -110,7 +111,7 @@ blogsRouter.post('/', async (request, response) => {
         user = await User.findOne({})  // fixupper  TODO
       }
 
-      //console.log('UUUU: ', user)
+      console.log('UUUU: ', user)
 
       const blog = new Blog({
         title: body.title,
